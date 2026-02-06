@@ -5,26 +5,29 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:blabla/model/user/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:w3bla/main.dart';
+// import 'w3bla/main.dart';
+
+import '../lib/model/ride/ride.dart';
+import '../lib/services/rides_service.dart';
+import '../lib/model/ride/locations.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  Location locationTest1 = Location(name: "Leeds", country: Country.uk);
+  Location locationTest2 = Location(name: "Glasgow", country: Country.uk);
+  User userTest = User(
+    firstName: "Alice",
+    lastName: "Dupont",
+    email: "alice.dupont@example.com",
+    phone: "+33 612345678",
+    profilePicture: "https://randomuser.me/api/portraits/women/1.jpg",
+    verifiedProfile: true,
+  );
+  RidesService ridesServiceTest = RidesService();
+  Ride rideTest = Ride(departureLocation: locationTest1, departureDate: DateTime.now(), arrivalLocation: locationTest2, arrivalDateTime: DateTime.now(), driver: userTest, availableSeats: 2, pricePerSeat: 10);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+  RidesService.filterBy(departure: locationTest1);
 }

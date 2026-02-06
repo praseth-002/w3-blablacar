@@ -9,20 +9,38 @@ class RidesService {
   //  filter the rides starting from given departure location
   //
   static List<Ride> _filterByDeparture(Location departure) {
-    return [];
+    final List<Ride> filterByDepartureRides = [];
+    for(int i = 0; i < availableRides.length; i++){
+      if(availableRides[i].departureLocation == departure){
+        filterByDepartureRides.add(availableRides[i]);
+      }
+    }
+    return filterByDepartureRides;
   }
 
   //
   //  filter the rides starting for the given requested seat number
   //
   static List<Ride> _filterBySeatRequested(int requestedSeat) {
-    return [];
+    List<Ride> filterBySeatRequestedRides = [];
+    for(int i = 0; i < availableRides.length; i++){
+      if(availableRides[i].remainingSeats == requestedSeat) {
+        filterBySeatRequestedRides.add(availableRides[i]);
+      }
+    }
+    return filterBySeatRequestedRides;
   }
 
   //
   //  filter the rides   with several optional criteria (flexible filter options)
   //
   static List<Ride> filterBy({Location? departure, int? seatRequested}) {
-    return [];
+    final List<Ride> filterByBoth = [];
+    for(int i = 0; i < availableRides.length; i++){
+      if(availableRides[i].remainingSeats == seatRequested || availableRides[i].departureLocation == departure || availableRides[i].departureLocation == departure && availableRides[i].remainingSeats == seatRequested) {
+        filterByBoth.add(availableRides[i]);
+      }
+    }
+    return filterByBoth;
   }
 }
