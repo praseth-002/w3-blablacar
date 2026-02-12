@@ -10,8 +10,9 @@ class RidesService {
   //
   static List<Ride> _filterByDeparture(Location departure) {
     final List<Ride> filterByDepartureRides = [];
-    for(int i = 0; i < availableRides.length; i++){
-      if(availableRides[i].departureLocation == departure){
+    // for(int i = 0; i < remainingSeats.length; i++){
+    for (int i = 0; i < availableRides.length; i++) {
+      if (availableRides[i].departureLocation == departure) {
         filterByDepartureRides.add(availableRides[i]);
       }
     }
@@ -23,8 +24,9 @@ class RidesService {
   //
   static List<Ride> _filterBySeatRequested(int requestedSeat) {
     List<Ride> filterBySeatRequestedRides = [];
-    for(int i = 0; i < availableRides.length; i++){
-      if(availableRides[i].remainingSeats == requestedSeat) {
+    for (int i = 0; i < availableRides.length; i++) {
+      // if(availableRides[i].remainingSeats == requestedSeat) {
+      if (availableRides[i].availableSeats >= requestedSeat) {
         filterBySeatRequestedRides.add(availableRides[i]);
       }
     }
@@ -36,11 +38,17 @@ class RidesService {
   //
   static List<Ride> filterBy({Location? departure, int? seatRequested}) {
     final List<Ride> filterByBoth = [];
-    for(int i = 0; i < availableRides.length; i++){
-      if(availableRides[i].remainingSeats == seatRequested || availableRides[i].departureLocation == departure || availableRides[i].departureLocation == departure && availableRides[i].remainingSeats == seatRequested) {
-        filterByBoth.add(availableRides[i]);
+
+    for (final ride in availableRides) {
+      if (departure != null && ride.departureLocation != departure) {
+        continue;
       }
+      if (seatRequested != null && ride.availableSeats < seatRequested) {
+        continue;
+      }
+      filterByBoth.add(ride);
     }
+
     return filterByBoth;
   }
 }
