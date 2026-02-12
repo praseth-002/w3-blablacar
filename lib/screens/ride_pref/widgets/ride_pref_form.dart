@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import '../../../model/ride/locations.dart';
 import '../../../model/ride_pref/ride_pref.dart';
 import '../../../theme/theme.dart';
+import '../../../utils/animations_util.dart';
 import '../../../utils/date_time_util.dart';
+import '../../location_picker_screen.dart';
 
 ///
 /// A Ride Preference From is a view to select:
@@ -102,13 +104,20 @@ class _RidePrefFormState extends State<RidePrefForm> {
             icon: Icons.radio_button_unchecked,
             text: departure != null
                 ? '${departure!.name}, ${departure!.country.name}'
-                : 'Arrival',
+                : 'Departure',
             trailing: IconButton(
               icon: Icon(Icons.swap_vert, color: BlaColors.primary),
               onPressed: _swapLocations,
             ),
-            onTap: () {
-              setState(() => departure = fakeLocations.first);
+            onTap: () async {
+              final result = await Navigator.of(context).push<Location>(
+                AnimationUtils.createBottomToTopRoute(
+                  const LocationPickerScreen(),
+                ),
+              );
+              if (result != null) {
+                setState(() => departure = result);
+              }
             },
           ),
           BlaDivider(),
@@ -117,8 +126,15 @@ class _RidePrefFormState extends State<RidePrefForm> {
             text: arrival != null
                 ? '${arrival!.name}, ${arrival!.country.name}'
                 : 'Arrival',
-            onTap: () {
-              setState(() => arrival = fakeLocations.last);
+            onTap: () async {
+              final result = await Navigator.of(context).push<Location>(
+                AnimationUtils.createBottomToTopRoute(
+                  const LocationPickerScreen(),
+                ),
+              );
+              if (result != null) {
+                setState(() => arrival = result);
+              }
             },
           ),
           BlaDivider(),
@@ -133,9 +149,7 @@ class _RidePrefFormState extends State<RidePrefForm> {
             text: '$requestedSeats passenger${requestedSeats > 1 ? "s" : ""}',
             onTap: () {},
           ),
-          SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: 10),
           BlaButton(
             icon: Icons.search,
             text: 'Search',
@@ -154,7 +168,6 @@ class _RidePrefFormState extends State<RidePrefForm> {
   }) {
     return GestureDetector(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: BlaSpacings.m),
         child: Row(
@@ -185,7 +198,6 @@ class _RidePrefFormState extends State<RidePrefForm> {
   }) {
     return GestureDetector(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: BlaSpacings.m),
         child: Row(
